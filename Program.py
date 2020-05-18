@@ -13,7 +13,7 @@ class Program:
         glutInit( ) 
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
         glutInitWindowSize(400, 800)
-        glutInitWindowPosition(0,0) 
+        glutInitWindowPosition(1000,0) 
         glutCreateWindow(b'Tetris')
         glEnable(GL_DEPTH_TEST) 
         glutDisplayFunc(self.SetView) 
@@ -27,11 +27,8 @@ class Program:
         self.Draw()
     def Draw(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        self.Grid.DrawBackground() # make sure to draw this
+        self.Grid.DrawBackground() # make sure to draw this first
         self.Grid.DrawGrid()
-        # print("here")
-        # glutSolidCube(4)
-        # glFlush()
         glutSwapBuffers()
         
         
