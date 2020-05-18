@@ -18,7 +18,9 @@ class Program:
         glutInitWindowPosition(1000,0) 
         glutCreateWindow(b'Tetris')
         glEnable(GL_DEPTH_TEST) 
-        glutDisplayFunc(self.SetView) 
+        self.SetView()
+        self.getShape()  # initial shape
+        glutDisplayFunc(self.Draw) 
         # glutIdleFunc(SetView)
         glutMainLoop()     
     
@@ -26,10 +28,12 @@ class Program:
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
         glOrtho(0, 20, 0, 40, -1, 1)
-        self.Draw()
+        
+    def getShape(self):
+        currentShape = random.choice([ITetrominoe, OTetrominoe, JTetrominoe, TTetrominoe, LTetrominoe, STetrominoe, ZTetrominoe])(self.Grid)
+    
     def Draw(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        currentShape = random.choice([ITetrominoe, OTetrominoe, JTetrominoe, TTetrominoe, LTetrominoe, STetrominoe, ZTetrominoe])(self.Grid)
         self.Grid.DrawBackground() # make sure to draw this first
         self.Grid.DrawGrid()
         glutSwapBuffers()
