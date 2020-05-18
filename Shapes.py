@@ -39,17 +39,26 @@ class Shape(ABC):
         self.Update(0) # clear previous state
         gridRow, gridColumn = self.currentPosition
         tempPos = [gridRow, gridColumn]
+        tempState = self.currentState
+        index = self.indexOfState
         if key == GLUT_KEY_RIGHT:
             tempPos = [gridRow, gridColumn + 1]
         if key == GLUT_KEY_LEFT:
             tempPos = [gridRow, gridColumn - 1]
         if key == GLUT_KEY_DOWN:
             tempPos = [gridRow - 1, gridColumn]
-        tempState = self.states[self.indexOfState]  # update state here
+            
+        if key == GLUT_KEY_UP:
+            tempState = self.getState(1)
+        if key == b'z':
+            tempState = self.getState(0)
+            
         valid = self.ValidTransforamtion(tempPos, tempState)
         if valid:
             self.currentState = tempState
             self.currentPosition = tempPos
+        else:
+            self.indexOfState = index          # if rotation not valid, dont change index of state
         self.Update(1)
          
         
@@ -69,7 +78,7 @@ class Shape(ABC):
             self.indexOfState = 0
         if self.indexOfState < 0:
             self.indexOfState = len(self.states) - 1
-        return states[self.indexOfState]
+        return self.states[self.indexOfState]
     
     
     def ValidTransforamtion(self, position, state):
@@ -253,11 +262,11 @@ class STetrominoe(Shape):
                 [1, 1, 0]
             ],
             [
-                [
-                    [1, 0, 0],
-                    [1, 1, 0],
-                    [0, 1, 0]
-                ]
+                
+                [1, 0, 0],
+                [1, 1, 0],
+                [0, 1, 0]
+                
             ]
         ]
         self.color = (0, 1, 0)
