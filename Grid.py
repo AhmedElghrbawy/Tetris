@@ -14,7 +14,7 @@ class Grid:
             lis = [0, (0, 0, 0)]
             for j in range(10):
                 self.grid[i].append(copy.deepcopy(lis)) 
-        print(self.grid)
+        # print(self.grid)
             
     def DrawBackground(self):
         glMatrixMode(GL_MODELVIEW)
