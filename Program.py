@@ -21,7 +21,9 @@ class Program:
         self.SetView()
         self.getShape()  # initial shape
         glutDisplayFunc(self.Draw) 
-        # glutIdleFunc(SetView)
+        glutSpecialFunc(self.userInput)
+        glutKeyboardFunc(self.userInput)
+        glutIdleFunc(self.Draw)
         glutMainLoop()     
     
     def SetView(self):
@@ -30,14 +32,22 @@ class Program:
         glOrtho(0, 20, 0, 40, -1, 1)
         
     def getShape(self):
-        currentShape = random.choice([ITetrominoe, OTetrominoe, JTetrominoe, TTetrominoe, LTetrominoe, STetrominoe, ZTetrominoe])(self.Grid)
-    
+        self.currentShape = random.choice([ITetrominoe, OTetrominoe, JTetrominoe, TTetrominoe, LTetrominoe, STetrominoe, ZTetrominoe])(self.Grid)
+        # self.currentShape = ITetrominoe(self.Grid)
+        # self.currentShape = OTetrominoe(self.Grid)
+        # self.currentShape = JTetrominoe(self.Grid)
+        # self.currentShape = TTetrominoe(self.Grid)
+        # self.currentShape = LTetrominoe(self.Grid)
+        # self.currentShape = STetrominoe(self.Grid)
+        # self.currentShape = ZTetrominoe(self.Grid)
     def Draw(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         self.Grid.DrawBackground() # make sure to draw this first
         self.Grid.DrawGrid()
         glutSwapBuffers()
-        
+    
+    def userInput(self, key, x, y):
+        self.currentShape.Transforme(key)
         
 if __name__ == "__main__":
     P = Program()
