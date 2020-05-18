@@ -15,14 +15,14 @@ class Shape(ABC):
         
         
     def Draw(self):
-        row = self.currentPosition[0]
-        for r in self.currentState:
-            column = self.currentPosition[1]
-            for c in r:
-                if c != 0:
-                    self.grid[row][column] = [1, (self.color)]
-                column += 1
-            row -= 1
+        gridRow = self.currentPosition[0]
+        for stateRow in self.currentState:
+            gridColumn = self.currentPosition[1]
+            for stateColumn in stateRow:
+                if stateColumn != 0:
+                    self.grid[gridRow][gridColumn] = [1, (self.color)]
+                gridColumn += 1
+            gridRow -= 1
     
 
 

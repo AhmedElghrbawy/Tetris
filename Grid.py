@@ -11,10 +11,10 @@ class Grid:
         self.grid = [0] * (self.row + 2)              # [full, (RGBcolor)]        
         for i in range(0, self.row + 2):    # 2 extra rows
             self.grid[i] = []
-            lis = [1, (0, 0, 0)]
+            lis = [0, (0, 0, 0)]
             for j in range(10):
                 self.grid[i].append(copy.deepcopy(lis)) 
-        # print(self.grid[3][3])
+        print(self.grid)
             
     def DrawBackground(self):
         glMatrixMode(GL_MODELVIEW)
