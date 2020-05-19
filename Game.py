@@ -5,7 +5,7 @@ from Shapes import *
 from Grid import Grid
 import random
 
-class Program:
+class Game:
     Grid = Grid()
     currentShape = None
     def __init__(self):
@@ -52,4 +52,4 @@ class Program:
         self.currentShape.Transform(key)
         
 if __name__ == "__main__":
-    P = Program()
+    g = Game()
