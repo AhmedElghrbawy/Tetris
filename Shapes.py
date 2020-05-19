@@ -35,7 +35,7 @@ class Shape(ABC):
             gridRow -= 1
     
 
-    def Transforme(self, key):
+    def Transform(self, key):
         self.Update(0) # clear previous state
         gridRow, gridColumn = self.currentPosition
         tempPos = [gridRow, gridColumn]
@@ -114,10 +114,10 @@ class ITetrominoe(Shape):
                     [0, 0, 0, 0]
                 ],
                 [
-                    [0, 1, 0, 0],                
-                    [0, 1, 0, 0],
-                    [0, 1, 0, 0],
-                    [0, 1, 0, 0]
+                    [0, 0, 1, 0],                
+                    [0, 0, 1, 0],
+                    [0, 0, 1, 0],
+                    [0, 0, 1, 0]
                 ],
                 [
                     [0, 0, 0, 0],
@@ -126,10 +126,10 @@ class ITetrominoe(Shape):
                     [0, 0, 0, 0]
                 ],
                 [
-                    [0, 0, 1, 0],                
-                    [0, 0, 1, 0],
-                    [0, 0, 1, 0],
-                    [0, 0, 1, 0]
+                    [0, 1, 0, 0],                
+                    [0, 1, 0, 0],
+                    [0, 1, 0, 0],
+                    [0, 1, 0, 0]
                 ]
         ]
         self.color = (0.1, 0.9, 1)

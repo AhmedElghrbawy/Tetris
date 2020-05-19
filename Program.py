@@ -40,6 +40,8 @@ class Program:
         # self.currentShape = LTetrominoe(self.Grid)
         # self.currentShape = STetrominoe(self.Grid)
         # self.currentShape = ZTetrominoe(self.Grid)
+        
+        
     def Draw(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         self.Grid.DrawBackground() # make sure to draw this first
@@ -47,7 +49,7 @@ class Program:
         glutSwapBuffers()
     
     def userInput(self, key, x, y):
-        self.currentShape.Transforme(key)
+        self.currentShape.Transform(key)
         
 if __name__ == "__main__":
     P = Program()
