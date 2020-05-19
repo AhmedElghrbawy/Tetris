@@ -146,8 +146,10 @@ class OTetrominoe(Shape):
     def __init__(self, Grid):
         self.states = [
             [
-                [1, 1],
-                [1, 1]
+                [0, 1, 1, 0],
+                [0, 1, 1, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0]
             ]
         ]
         self.color = (1, .9, .2)
