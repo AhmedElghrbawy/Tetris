@@ -6,14 +6,14 @@ from abc import ABC
 
 class Shape(ABC):
     def __init__(self, Grid, states, color):
-        self.currentPosition =  [10, 5]  # top left Pos
+        self.currentPosition =  [Grid.row + 1, int(Grid.column / 2 - 2)]  # top left Pos
         self.grid = Grid.grid
         self.states = states
         self.indexOfState = 0    # declares the index of current state
         self.currentState = states[self.indexOfState]
         self.color = color
+        self.locked = False
         self.Update(1) 
-        
         
     def Update(self, Set):
         '''
@@ -58,8 +58,11 @@ class Shape(ABC):
             self.currentState = tempState
             self.currentPosition = tempPos
         else:
+            if key == GLUT_KEY_DOWN:
+                self.locked = True
             self.indexOfState = index          # if rotation not valid, dont change index of state
         self.Update(1)
+        return self.locked
          
         
     
@@ -89,7 +92,7 @@ class Shape(ABC):
                 if stateColumn != 0:
                     if gridColumn >= len(self.grid[0]) or gridColumn < 0 or gridRow < 0: # out of bound
                         return False
-                    if self.grid[gridRow][gridColumn] == 1:     # ones collide
+                    if self.grid[gridRow][gridColumn][0] == 1:     # ones collide
                         return False
                 gridColumn += 1
             gridRow -= 1

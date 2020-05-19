@@ -29,7 +29,7 @@ class Game:
     def SetView(self):
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        glOrtho(0, 20, 0, 40, -1, 1)
+        glOrtho(0, 20, 0, 44, -1, 1)
         
     def getShape(self):
         self.currentShape = random.choice([ITetrominoe, OTetrominoe, JTetrominoe, TTetrominoe, LTetrominoe, STetrominoe, ZTetrominoe])(self.Grid)
@@ -49,7 +49,10 @@ class Game:
         glutSwapBuffers()
     
     def userInput(self, key, x, y):
-        self.currentShape.Transform(key)
+        locked = self.currentShape.Transform(key)
+        if locked:
+            self.getShape()
+        
         
 if __name__ == "__main__":
     g = Game()
