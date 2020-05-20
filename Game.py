@@ -4,6 +4,7 @@ from OpenGL.GLUT import *
 from Shapes import *
 from Grid import Grid
 import random
+import sys
 
 class Game:
     Grid = Grid()
@@ -31,13 +32,20 @@ class Game:
     def SetView(self):
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        glOrtho(0, 20, 0, 44, -1, 1)
+        glOrtho(0, 20, 0, 40, -1, 1)
         
     def getShape(self):
+        '''
+        Defines shapes Bag and updates currentShape
+        '''
         if len(self.shapeBag) == 0:
             self.shapeBag = [ITetrominoe, OTetrominoe, JTetrominoe, TTetrominoe, LTetrominoe, STetrominoe, ZTetrominoe]
             random.shuffle(self.shapeBag)
-        self.currentShape = self.shapeBag[-1](self.Grid)
+        try: # tries to make a new shape. if it fail, game ends
+            self.currentShape = self.shapeBag[-1](self.Grid) 
+        except ValueError as err:
+            print(repr(err))
+            sys.exit()
         self.shapeBag.pop(-1)
         
     def Draw(self):
@@ -53,10 +61,16 @@ class Game:
         self.Draw()
         
     def Gravity(self, value):
+        '''
+        auto transforme object down
+        '''
         self.userInput(GLUT_KEY_DOWN, None, None)
         glutTimerFunc(self.getTime(), self.Gravity, 1)
         
     def getTime(self):
+        '''
+        returns Graity transformation time based on current level
+        '''
         return  1000 - self.Level
         
         

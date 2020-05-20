@@ -6,18 +6,33 @@ from abc import ABC
 
 class Shape(ABC):
     def __init__(self, Grid, states, color):
-        self.currentPosition =  [Grid.row + 1, int(Grid.column / 2 - 2)]  # top left Pos
+        self.currentPosition =  [Grid.row, int(Grid.column / 2 - 2)]  # top left Pos
         self.grid = Grid.grid
         self.states = states
         self.indexOfState = 0    # declares the index of current state
         self.currentState = states[self.indexOfState]
         self.color = color
         self.locked = False
-        self.Update(1) 
+        self.Spawn() 
+        
+    def Spawn(self):
+        '''
+        try to spawn in row 21. if fail then try row 22. if both fails, game ends
+        '''
+        first = self.ValidTransforamtion(self.currentPosition, self.currentState)
+        if first:
+            self.Update(1)
+            return
+        self.currentPosition = [Grid.row + 1, int(Grid.column / 2 - 2)]
+        second = self.ValidTransforamtion(self.currentPosition, self.currentState)
+        if second:
+            self.Update(1)
+        else:
+            raise ValueError("Can't spawn tetrominoe, Game is quitting...")    
         
     def Update(self, Set):
         '''
-        Sets or clears current state and position in the grid\n
+        Sets or clears current shape state and position in the grid\n
         Attributes:\n
             Set: 1 to set, 0 to clear
         '''
@@ -36,6 +51,9 @@ class Shape(ABC):
     
 
     def Transform(self, key):
+        '''
+        takes user input or gravity input and tries to transform shape to new position and state
+        '''
         self.Update(0) # clear previous state
         gridRow, gridColumn = self.currentPosition
         tempPos = [gridRow, gridColumn]
@@ -85,6 +103,9 @@ class Shape(ABC):
     
     
     def ValidTransforamtion(self, position, state):
+        '''
+        indicates if Transformation is valid or not
+        '''
         gridRow = position[0]
         for stateRow in state:
             gridColumn = position[1]
