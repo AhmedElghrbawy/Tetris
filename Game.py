@@ -25,8 +25,7 @@ class Game:
         glutDisplayFunc(self.Draw) 
         glutSpecialFunc(self.userInput)
         glutKeyboardFunc(self.userInput)
-        self.getTime()
-        glutTimerFunc(self.Time, self.Gravity, 1)
+        glutTimerFunc(self.getTime(), self.Gravity, 1)
         glutMainLoop()     
     
     def SetView(self):
@@ -55,11 +54,10 @@ class Game:
         
     def Gravity(self, value):
         self.userInput(GLUT_KEY_DOWN, None, None)
-        self.getTime()
-        glutTimerFunc(self.Time, self.Gravity, 1)
+        glutTimerFunc(self.getTime(), self.Gravity, 1)
         
     def getTime(self):
-        self.Time = 1000 - self.Level
+        return  1000 - self.Level
         
         
 if __name__ == "__main__":
