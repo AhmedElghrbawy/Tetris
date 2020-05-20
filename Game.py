@@ -23,7 +23,7 @@ class Game:
         glutDisplayFunc(self.Draw) 
         glutSpecialFunc(self.userInput)
         glutKeyboardFunc(self.userInput)
-        glutIdleFunc(self.Draw)
+        # glutIdleFunc(self.Draw)
         glutMainLoop()     
     
     def SetView(self):
@@ -52,6 +52,7 @@ class Game:
         locked = self.currentShape.Transform(key)
         if locked:
             self.getShape()
+        self.Draw()
         
         
 if __name__ == "__main__":
