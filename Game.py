@@ -9,6 +9,7 @@ class Game:
     Grid = Grid()
     currentShape = None
     shapeBag = []
+    Level = 0
     def __init__(self):
         self.main()
         
@@ -24,7 +25,8 @@ class Game:
         glutDisplayFunc(self.Draw) 
         glutSpecialFunc(self.userInput)
         glutKeyboardFunc(self.userInput)
-        # glutIdleFunc(self.Draw)
+        self.getTime()
+        glutTimerFunc(self.Time, self.Gravity, 1)
         glutMainLoop()     
     
     def SetView(self):
@@ -50,6 +52,14 @@ class Game:
         if locked:
             self.getShape()
         self.Draw()
+        
+    def Gravity(self, value):
+        self.userInput(GLUT_KEY_DOWN, None, None)
+        self.getTime()
+        glutTimerFunc(self.Time, self.Gravity, 1)
+        
+    def getTime(self):
+        self.Time = 1000 - self.Level
         
         
 if __name__ == "__main__":
