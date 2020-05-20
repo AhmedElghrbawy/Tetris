@@ -8,6 +8,7 @@ import random
 class Game:
     Grid = Grid()
     currentShape = None
+    shapeBag = []
     def __init__(self):
         self.main()
         
@@ -32,15 +33,11 @@ class Game:
         glOrtho(0, 20, 0, 44, -1, 1)
         
     def getShape(self):
-        self.currentShape = random.choice([ITetrominoe, OTetrominoe, JTetrominoe, TTetrominoe, LTetrominoe, STetrominoe, ZTetrominoe])(self.Grid)
-        # self.currentShape = ITetrominoe(self.Grid)
-        # self.currentShape = OTetrominoe(self.Grid)
-        # self.currentShape = JTetrominoe(self.Grid)
-        # self.currentShape = TTetrominoe(self.Grid)
-        # self.currentShape = LTetrominoe(self.Grid)
-        # self.currentShape = STetrominoe(self.Grid)
-        # self.currentShape = ZTetrominoe(self.Grid)
-        
+        if len(self.shapeBag) == 0:
+            self.shapeBag = [ITetrominoe, OTetrominoe, JTetrominoe, TTetrominoe, LTetrominoe, STetrominoe, ZTetrominoe]
+            random.shuffle(self.shapeBag)
+        self.currentShape = self.shapeBag[-1](self.Grid)
+        self.shapeBag.pop(-1)
         
     def Draw(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
