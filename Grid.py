@@ -12,7 +12,7 @@ class Grid:
         for i in range(0, self.row + 2):    # 2 extra rows
             self.grid[i] = []
             lis = [0, (0, 0, 0)]
-            for j in range(10):
+            for j in range(self.column):
                 self.grid[i].append(copy.deepcopy(lis)) 
         # print(self.grid)
             
@@ -46,3 +46,31 @@ class Grid:
                     glVertex2f(x + blockLen , y + blockLen)
                     glVertex2f(x + blockLen , y )
         glEnd()
+        
+    def ClearLines(self, position):
+        rowsToClear = [-1, 0] # stores the index of the top-most completed row (if exists) and number of rows
+        row = position[0]
+        for row in range(row, row - 4, -1):
+            if row < 0: # out of range
+                break
+            full = True
+            for cell in self.grid[row]:
+                if cell[0] == 0:
+                    full = False
+                    break
+            if full == True:
+                rowsToClear[0] = max(rowsToClear[0], row)  # store top most
+                rowsToClear[1] += 1 # increase number of rows
+        
+        while rowsToClear[1] > 0:
+            # erase completed row
+            self.grid.pop(rowsToClear[0])
+            rowsToClear[0] -= 1
+            rowsToClear[1] -= 1
+            # make a new row
+            self.grid.append([])         
+            lis = [0, (0, 0, 0)]
+            for j in range(self.column):
+                self.grid[-1].append(copy.deepcopy(lis))    
+        
+# print(list(range(10, 6, -1)))

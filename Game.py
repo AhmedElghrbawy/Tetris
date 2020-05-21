@@ -55,8 +55,9 @@ class Game:
         glutSwapBuffers()
     
     def userInput(self, key, x, y):
-        locked = self.currentShape.Transform(key)
+        locked, currentPos = self.currentShape.Transform(key)
         if locked:
+            self.Grid.ClearLines(currentPos)
             self.getShape()
         self.Draw()
         

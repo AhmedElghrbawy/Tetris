@@ -80,7 +80,7 @@ class Shape(ABC):
                 self.locked = True
             self.indexOfState = index          # if rotation not valid, dont change index of state
         self.Update(1)
-        return self.locked
+        return (self.locked, self.currentPosition)
          
         
     
