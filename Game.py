@@ -17,8 +17,8 @@ class Game:
     def main(self):
         glutInit( ) 
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
-        glutInitWindowSize(400, 800)
-        glutInitWindowPosition(1000,0) 
+        glutInitWindowSize(600, 800)
+        glutInitWindowPosition(800,0) 
         glutCreateWindow(b'Tetris')
         glEnable(GL_DEPTH_TEST) 
         self.SetView()
@@ -32,26 +32,34 @@ class Game:
     def SetView(self):
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        glOrtho(0, 20, 0, 40, -1, 1)
+        glOrtho(0, 34, 0, 40, -1, 1)
         
     def getShape(self):
         '''
         Defines shapes Bag and updates currentShape
         '''
-        if len(self.shapeBag) == 0:
-            self.shapeBag = [ITetrominoe, OTetrominoe, JTetrominoe, TTetrominoe, LTetrominoe, STetrominoe, ZTetrominoe]
-            random.shuffle(self.shapeBag)
+        if len(self.shapeBag) <= 3:
+            tempList = [ITetrominoe, OTetrominoe, JTetrominoe, TTetrominoe, LTetrominoe, STetrominoe, ZTetrominoe]
+            random.shuffle(tempList)
+            self.shapeBag = [*tempList, *self.shapeBag]
         try: # tries to make a new shape. if it fail, game ends
             self.currentShape = self.shapeBag[-1](self.Grid) 
         except ValueError as err:
             print(repr(err))
             sys.exit()
         self.shapeBag.pop(-1)
+        first = self.shapeBag[-1](self.Grid, 0)
+        second = self.shapeBag[-2](self.Grid, 0)
+        third = self.shapeBag[-3](self.Grid, 0)
+        self.Grid.next3Shapes = [first, second, third]        # last 3 shapes of shape bag
+        
         
     def Draw(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         self.Grid.DrawBackground() # make sure to draw this first
         self.Grid.DrawGrid()
+        self.Grid.DrawNextBackground()
+        self.Grid.DrawNextGrid()
         glutSwapBuffers()
     
     def userInput(self, key, x, y):

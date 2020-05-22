@@ -5,7 +5,7 @@ from Grid import Grid
 from abc import ABC
 
 class Shape(ABC):
-    def __init__(self, Grid, states, color):
+    def __init__(self, Grid, states, color, spawn):
         self.currentPosition =  [Grid.row, int(Grid.column / 2 - 2)]  # top left Pos
         self.grid = Grid.grid
         self.states = states
@@ -13,7 +13,8 @@ class Shape(ABC):
         self.currentState = states[self.indexOfState]
         self.color = color
         self.locked = False
-        self.Spawn() 
+        if spawn:
+            self.Spawn() 
         
     def Spawn(self):
         '''
@@ -129,7 +130,7 @@ class Shape(ABC):
     
 
 class ITetrominoe(Shape):
-    def __init__(self, Grid):
+    def __init__(self, Grid, spawn = 1):
         self.states = [
                 [
                     [0, 0, 0, 0],
@@ -157,7 +158,7 @@ class ITetrominoe(Shape):
                 ]
         ]
         self.color = (0.1, 0.9, 1)
-        super(ITetrominoe, self).__init__(Grid, self.states, self.color)
+        super(ITetrominoe, self).__init__(Grid, self.states, self.color, spawn)
         
         
     # def Draw(self):
@@ -167,7 +168,7 @@ class ITetrominoe(Shape):
                     
 
 class OTetrominoe(Shape):
-    def __init__(self, Grid):
+    def __init__(self, Grid, spawn = 1):
         self.states = [
             [
                 [0, 1, 1, 0],
@@ -177,13 +178,13 @@ class OTetrominoe(Shape):
             ]
         ]
         self.color = (1, .9, .2)
-        super(OTetrominoe, self).__init__(Grid, self.states, self.color)
+        super(OTetrominoe, self).__init__(Grid, self.states, self.color, spawn)
         
     
 
 
 class TTetrominoe(Shape):
-    def __init__(self, Grid):
+    def __init__(self, Grid, spawn = 1):
         self.states = [
             [
                 [0, 1, 0],
@@ -207,12 +208,12 @@ class TTetrominoe(Shape):
             ]
         ]
         self.color = (1, 0, .8)
-        super(TTetrominoe, self).__init__(Grid, self.states, self.color)
+        super(TTetrominoe, self).__init__(Grid, self.states, self.color, spawn)
     
     
     
 class JTetrominoe(Shape):
-    def __init__(self, Grid):
+    def __init__(self, Grid, spawn = 1):
         self.states = [
             [
                 [1, 0, 0],
@@ -236,12 +237,12 @@ class JTetrominoe(Shape):
             ]
         ]
         self.color = (0, 0, 1)
-        super(JTetrominoe, self).__init__(Grid, self.states, self.color)
+        super(JTetrominoe, self).__init__(Grid, self.states, self.color, spawn)
 
 
 
 class LTetrominoe(Shape):
-    def __init__(self, Grid):
+    def __init__(self, Grid, spawn = 1):
         self.states = [
             [
                 [0, 0, 1],
@@ -265,12 +266,12 @@ class LTetrominoe(Shape):
             ]
         ]
         self.color = (1, .7, .2)
-        super(LTetrominoe, self).__init__(Grid, self.states, self.color)
+        super(LTetrominoe, self).__init__(Grid, self.states, self.color, spawn)
 
 
 
 class STetrominoe(Shape):
-    def __init__(self, Grid):
+    def __init__(self, Grid, spawn = 1):
         self.states = [
             [
                 [0, 1, 1],
@@ -296,10 +297,10 @@ class STetrominoe(Shape):
             ]
         ]
         self.color = (0, 1, 0)
-        super(STetrominoe, self).__init__(Grid, self.states, self.color)
+        super(STetrominoe, self).__init__(Grid, self.states, self.color, spawn)
         
 class ZTetrominoe(Shape):
-    def __init__(self, Grid):
+    def __init__(self, Grid, spawn = 1):
         self.states = [
             [
                 [1, 1, 0],
@@ -323,5 +324,5 @@ class ZTetrominoe(Shape):
             ]
         ]
         self.color = (1, 0, 0)
-        super(ZTetrominoe, self).__init__(Grid, self.states, self.color)
+        super(ZTetrominoe, self).__init__(Grid, self.states, self.color, spawn)
         
