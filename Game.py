@@ -48,10 +48,8 @@ class Game:
             print(repr(err))
             sys.exit()
         self.shapeBag.pop(-1)
-        first = self.shapeBag[-1](self.Grid, 0)
-        second = self.shapeBag[-2](self.Grid, 0)
-        third = self.shapeBag[-3](self.Grid, 0)
-        self.Grid.next3Shapes = [first, second, third]        # last 3 shapes of shape bag
+        
+        self.Grid.next3Shapes = self.shapeBag[-1: -4: -1]        # last 3 shapes of shape bag
         
         
     def Draw(self):

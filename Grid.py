@@ -102,9 +102,9 @@ class Grid:
         self.ClearNextGrid()
         row = len(self.nextGrid) - 1
         for shape in self.next3Shapes:
-            for r in range(len(shape.currentState)):
-                for c in range(len(shape.currentState[0])):
-                    if shape.currentState[r][c] == 1:
+            for r in range(len(shape.states[0])):
+                for c in range(len(shape.states[0][0])):
+                    if shape.states[0][r][c] == 1:
                         self.nextGrid[row - r][c] = shape.color
             row -= 3
         self.UpdateNextGridColors()
