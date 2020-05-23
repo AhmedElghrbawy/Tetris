@@ -6,6 +6,7 @@ from Grid import Grid
 import random
 import sys
 
+
 class Game:
     Grid = Grid()
     currentShape = None
@@ -59,6 +60,7 @@ class Game:
         self.Grid.DrawGrid()
         self.Grid.DrawNextBackground()
         self.Grid.DrawNextGrid()
+        self.RengerScore()
         glutSwapBuffers()
     
     def userInput(self, key, x, y):
@@ -66,7 +68,7 @@ class Game:
         if locked:
             self.score += self.Grid.ClearLines(currentPos, self.Level)
             self.score += 100 * self.Level
-            print("score", self.score)
+            self.getTime()   # adjust score and time
             self.getShape()
         self.Draw()
         
@@ -87,6 +89,17 @@ class Game:
         if time < 200:
             time = 200
         return  time
+    
+
+    def RengerScore(self):
+        glMatrixMode(GL_MODELVIEW)
+        glLoadIdentity()
+        glScale(.12, .12, 1)
+        score = "Score: " + str(self.score)
+        level = "Level: " + str(self.Level)
+        print(score, level)
+        # for c in score:
+        #     glutStrokeString(GLUT_STROKE_MONO_ROMAN, c) 
         
         
 if __name__ == "__main__":
