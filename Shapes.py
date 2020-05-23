@@ -2,9 +2,8 @@ from OpenGL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 from Grid import Grid
-from abc import ABC
 
-class Shape(ABC):
+class Shape():
     def __init__(self, Grid, states, color):
         self.currentPosition =  [Grid.row, int(Grid.column / 2 - 2)]  # top left Pos
         self.grid = Grid.grid

@@ -1,6 +1,7 @@
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
+import pygame
 from Shapes import *
 from Grid import Grid
 import random
@@ -17,7 +18,10 @@ class Game:
         self.main()
         
     def main(self):
-        glutInit( ) 
+        glutInit() 
+        pygame.mixer.init()
+        pygame.mixer.music.load("Tetris_GameBoy.mp3")
+        pygame.mixer.music.play(-1)
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
         glutInitWindowSize(600, 800)
         glutInitWindowPosition(800,0) 
