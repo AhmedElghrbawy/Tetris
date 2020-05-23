@@ -10,7 +10,8 @@ class Game:
     Grid = Grid()
     currentShape = None
     shapeBag = []
-    Level = 0
+    Level = 1
+    score = 0
     def __init__(self):
         self.main()
         
@@ -63,13 +64,15 @@ class Game:
     def userInput(self, key, x, y):
         locked, currentPos = self.currentShape.Transform(key)
         if locked:
-            self.Grid.ClearLines(currentPos)
+            self.score += self.Grid.ClearLines(currentPos, self.Level)
+            self.score += 100 * self.Level
+            print("score", self.score)
             self.getShape()
         self.Draw()
         
     def Gravity(self, value):
         '''
-        auto transforme object down
+        auto transforms object down
         '''
         self.userInput(GLUT_KEY_DOWN, None, None)
         glutTimerFunc(self.getTime(), self.Gravity, 1)
@@ -78,7 +81,12 @@ class Game:
         '''
         returns Graity transformation time based on current level
         '''
-        return  1000 - self.Level
+        if self.score >= 2**(self.Level - 1) * 1000:
+            self.Level += 1
+        time = 1200 - 200 * self.Level
+        if time < 200:
+            time = 200
+        return  time
         
         
 if __name__ == "__main__":
