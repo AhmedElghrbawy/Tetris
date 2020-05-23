@@ -59,7 +59,7 @@ class Grid:
                     glVertex2f(x + blockLen , y )
         glEnd()
         
-    def ClearLines(self, position, level):
+    def ClearLines(self, position, level, Game):
         rowsToClear = [-1, 0] # stores the index of the top-most completed row (if exists) and number of rows
         row = position[0]
         for row in range(row, row - 4, -1):
@@ -75,6 +75,15 @@ class Grid:
                 rowsToClear[1] += 1 # increase number of rows
         n = rowsToClear[1]          # number of rows to be cleared (for scoring)
         while rowsToClear[1] > 0:
+            # Animate
+            x = 0
+            while x < 1:
+                color = (1, x, x)
+                for cell in self.grid[rowsToClear[0]]:
+                    cell[1] = color
+                Game.Draw()
+                x += .04
+            
             # erase completed row
             self.grid.pop(rowsToClear[0])
             rowsToClear[0] -= 1

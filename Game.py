@@ -70,7 +70,7 @@ class Game:
     def userInput(self, key, x, y):
         locked, currentPos = self.currentShape.HandleInput(key)
         if locked:
-            self.score += self.Grid.ClearLines(currentPos, self.Level)
+            self.score += self.Grid.ClearLines(currentPos, self.Level, self)
             self.score += 100 * self.Level
             self.getTime()   # adjust score and time
             self.getShape()
