@@ -68,7 +68,7 @@ class Game:
         glutSwapBuffers()
     
     def userInput(self, key, x, y):
-        locked, currentPos = self.currentShape.Transform(key)
+        locked, currentPos = self.currentShape.HandleInput(key)
         if locked:
             self.score += self.Grid.ClearLines(currentPos, self.Level)
             self.score += 100 * self.Level

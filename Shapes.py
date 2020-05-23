@@ -48,16 +48,10 @@ class Shape():
                 gridColumn += 1
             gridRow -= 1
     
-
-    def Transform(self, key):
-        '''
-        takes user input or gravity input and tries to transform shape to new position and state
-        '''
-        self.Update(0) # clear previous state
+    def HandleInput(self, key):
         gridRow, gridColumn = self.currentPosition
         tempPos = [gridRow, gridColumn]
         tempState = self.currentState
-        index = self.indexOfState
         if key == GLUT_KEY_RIGHT:
             tempPos = [gridRow, gridColumn + 1]
         if key == GLUT_KEY_LEFT:
@@ -69,7 +63,22 @@ class Shape():
             tempState = self.getState(1)
         if key == b'z':
             tempState = self.getState(0)
-            
+        if key == b' ':
+            while True:
+                self.HandleInput(GLUT_KEY_DOWN)
+                if self.locked == True:
+                    return (self.locked, self.currentPosition)
+
+        return self.Transform(key, tempPos, tempState)
+
+        
+
+    def Transform(self, key, tempPos, tempState):
+        '''
+        tries to transform shape to new position and state
+        '''
+        self.Update(0) # clear previous state
+        index = self.indexOfState 
         valid = self.ValidTransforamtion(tempPos, tempState)
         if valid:
             self.currentState = tempState
@@ -81,7 +90,8 @@ class Shape():
         self.Update(1)
         return (self.locked, self.currentPosition)
          
-        
+    
+            
     
     
     def getState(self, next):
