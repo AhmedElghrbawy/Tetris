@@ -5,7 +5,7 @@ from Grid import Grid
 
 class Shape():
     def __init__(self, Grid, states, color):
-        self.currentPosition =  [Grid.row, int(Grid.column / 2 - 2)]  # top left Pos
+        self.currentPosition =  [Grid.row - 2, int(Grid.column / 2 - 2)]  # top left Pos # intial is at row 21 (index 20)
         self.grid = Grid.grid
         self.states = states
         self.indexOfState = 0    # declares the index of current state
@@ -22,7 +22,7 @@ class Shape():
         if first:
             self.Update(1)
             return
-        self.currentPosition = [Grid.row + 1, int(Grid.column / 2 - 2)]
+        self.currentPosition = [Grid.row - 1, int(Grid.column / 2 - 2)]
         second = self.ValidTransforamtion(self.currentPosition, self.currentState)
         if second:
             self.Update(1)

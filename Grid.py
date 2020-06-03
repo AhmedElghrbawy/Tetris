@@ -4,7 +4,7 @@ from OpenGL.GLUT import *
 import copy
 
 class Grid:
-    row = 20
+    row = 22
     column = 10
     grid = []
     nextGrid = []
@@ -21,24 +21,26 @@ class Grid:
         self.ClearNextGrid()
            
            
-    def ClearNextGrid(self):
-        self.nextGrid = [0] * 8 
-        for i in range(8):
-            self.nextGrid[i] = []
-            for j in range(4):
-                self.nextGrid[i].append((0, 0, 0))   
+       
                  
-    def DrawBackground(self):
+    def DrawBackground(self, rows, columns, origin):
+        if rows == None:
+            rows = self.row
+            columns = self.column
+            origin = (0, 0)
+        Xo, Yo = origin
+        XL = (columns + 1) * 2
+        YL = (rows + 1 ) * 2
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()                                     # block size 2 * 2
         glColor(1, 1, 1)                           
         glBegin(GL_LINES)                                     # visible Columns 20 --> 0 
-        for y in range(0, (self.row + 1) * 2, 2):            # Draw H lines
-            glVertex2f(0, y)
-            glVertex2f((self.column) * 2, y)             
-        for x in range(0, (self.column + 1) * 2, 2):         # Draw V lines
-            glVertex2f(x, 0)
-            glVertex2f(x, (self.row + 2) * 2)
+        for y in range(Yo, Yo + YL, 2):            # Draw H lines
+            glVertex2f(Xo, y)
+            glVertex2f(Xo + columns * 2, y)             
+        for x in range(Xo, Xo + XL, 2):         # Draw V lines
+            glVertex2f(x, Yo)
+            glVertex2f(x, Yo + rows * 2)
         glEnd()   
 
     def DrawGrid(self):
@@ -97,20 +99,13 @@ class Grid:
         return n * 100 * level
         
     def DrawNextBackground(self):
-        glMatrixMode(GL_MODELVIEW)
-        glLoadIdentity()                                     # block size 2 * 2
-        glColor(0, 0, 1)                           
-        glBegin(GL_LINES)
-        for x in range(24, 34, 2):
-            glVertex2f(x, 20)
-            glVertex2f(x, 36)
-        for y in range(20, 38, 2):
-            glVertex2f(24, y)
-            glVertex2f(32, y)
-        glEnd()
+        self.DrawBackground(8, 4, (24, 20))
     
     def DrawNextGrid(self):
-        self.ClearNextGrid()
+        '''
+        updates the underlayin Data structure with the 3 next shapes
+        '''
+        self.ClearNextGrid()   # clear grid every time before drawing agian
         row = len(self.nextGrid) - 1
         for shape in self.next3Shapes:
             for r in range(len(shape.states[0])):
@@ -118,11 +113,19 @@ class Grid:
                     if shape.states[0][r][c] == 1:
                         self.nextGrid[row - r][c] = shape.color
             row -= 3
-        self.UpdateNextGridColors()
+        self.UpdateNextGridColors()  
 
-
+    def ClearNextGrid(self):
+        self.nextGrid = [0] * 8    # loops nextGrid and sets its color to black (clears it )
+        for i in range(8):
+            self.nextGrid[i] = []
+            for j in range(4):
+                self.nextGrid[i].append((0, 0, 0))
         
     def UpdateNextGridColors(self):
+        '''
+        updates the color for the user
+        '''
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
         glBegin(GL_QUADS)

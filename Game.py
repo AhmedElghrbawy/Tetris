@@ -61,7 +61,7 @@ class Game:
         
     def Draw(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        self.Grid.DrawBackground() # make sure to draw this first
+        self.Grid.DrawBackground(None, None, None) # make sure to draw this first
         self.Grid.DrawGrid()
         self.Grid.DrawNextBackground()
         self.Grid.DrawNextGrid()
@@ -74,7 +74,7 @@ class Game:
         locked, currentPos = self.currentShape.HandleInput(key)
         if locked:
             self.score += self.Grid.ClearLines(currentPos, self.Level, self)
-            self.score += 200 * self.Level
+            self.score += 100 * self.Level
             self.getTime()   # adjust score and time
             self.getShape()
         self.Draw()
