@@ -82,7 +82,7 @@ class Grid:
                 for cell in self.grid[rowsToClear[0]]:
                     cell[1] = color
                 Game.Draw()
-                x += .04
+                x += .01
             
             # erase completed row
             self.grid.pop(rowsToClear[0])

@@ -14,6 +14,7 @@ class Game:
     shapeBag = []
     Level = 1
     score = 0
+    gameOver = False
     def __init__(self):
         self.main()
         
@@ -48,11 +49,11 @@ class Game:
             tempList = [ITetrominoe, OTetrominoe, JTetrominoe, TTetrominoe, LTetrominoe, STetrominoe, ZTetrominoe]
             random.shuffle(tempList)
             self.shapeBag = [*tempList, *self.shapeBag]
-        try: # tries to make a new shape. if it fail, game ends
+        try: # tries to spawn a new shape. if it fail, game ends
             self.currentShape = self.shapeBag[-1](self.Grid) 
         except ValueError as err:
-            print(repr(err))
-            sys.exit()
+            self.gameOver = True
+            self.EndGame()
         self.shapeBag.pop(-1)
         
         self.Grid.next3Shapes = self.shapeBag[-1: -4: -1]        # last 3 shapes of shape bag
@@ -64,14 +65,16 @@ class Game:
         self.Grid.DrawGrid()
         self.Grid.DrawNextBackground()
         self.Grid.DrawNextGrid()
-        self.RengerScore()
+        self.RenderScore()
         glutSwapBuffers()
     
     def userInput(self, key, x, y):
+        if self.gameOver:
+            return
         locked, currentPos = self.currentShape.HandleInput(key)
         if locked:
             self.score += self.Grid.ClearLines(currentPos, self.Level, self)
-            self.score += 100 * self.Level
+            self.score += 200 * self.Level
             self.getTime()   # adjust score and time
             self.getShape()
         self.Draw()
@@ -95,16 +98,40 @@ class Game:
         return  time
     
 
-    def RengerScore(self):
+    def RenderScore(self, x = 22, y = 15):
         glMatrixMode(GL_MODELVIEW)
+        glColor(0, 1, 0)
         glLoadIdentity()
-        glScale(.12, .12, 1)
+        glTranslate(x, y, 0)
+        glScale(.009, .009, 1)
         score = "Score: " + str(self.score)
         level = "Level: " + str(self.Level)
-        print(score, level)
-        # for c in score:
-        #     glutStrokeString(GLUT_STROKE_MONO_ROMAN, c) 
+        score = score.encode()
+        level = level.encode()
+        for c in score:
+            glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, c) 
+        glLoadIdentity()
+        glTranslate(x, y-2, 0)
+        glScale(.009, .009, 1)
+        for c in level:
+            glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, c) 
         
-        
+    def EndGame(self):
+        glutDisplayFunc(self.EndGame)
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        self.RenderScore(10, 20)
+        glColor3f(1, 0, 0)
+        glLoadIdentity()
+        glTranslate(10, 22, 0)
+        glScale(.009, .009, 1)
+        for c in 'game over :('.encode():
+            glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, c)
+        glutSwapBuffers()
+        pygame.mixer.stop()
+        pygame.mixer.music.load("end.mp3")
+        pygame.mixer.music.play(1)
+        glutTimerFunc(3000, sys.exit, 1)
+        glutMainLoop()
+               
 if __name__ == "__main__":
     g = Game()
