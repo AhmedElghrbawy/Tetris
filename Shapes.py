@@ -90,8 +90,14 @@ class Shape():
         self.Update(1)
         return (self.locked, self.currentPosition)
          
-    
-            
+    def GetGhost(self):
+        tempPos = self.currentPosition
+        self.Update(0)
+        while self.ValidTransforamtion(tempPos, self.currentState):
+            tempPos = [tempPos[0] - 1, tempPos[1]]
+        tempPos = [tempPos[0] + 1, tempPos[1]]
+        self.Update(1)
+        return (tempPos, self.currentState)         
     
     
     def getState(self, next):

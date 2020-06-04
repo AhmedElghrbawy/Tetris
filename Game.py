@@ -60,8 +60,11 @@ class Game:
         self.Grid.next3Shapes = self.shapeBag[-1: -4: -1]        # last 3 shapes of shape bag to render in next grid
         
         
-    def Draw(self):
+    def Draw(self, Animate = None):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        if Animate == None:
+            (gostPos, gostState) = self.currentShape.GetGhost()
+            self.Grid.DrawGhost(gostPos, gostState, self.currentShape)
         self.Grid.DrawBackground(None, None, None) 
         self.Grid.DrawGrid()
         self.Grid.DrawNextBackground()
@@ -81,7 +84,7 @@ class Game:
             n = self.Grid.ClearLines(currentPos, self)
             self.Lines += n
             self.score += 100 * self.Level * n  # added score based on cleared lines
-            self.score += 50 * self.Level       # added score based on locked
+            self.score += 100 * self.Level       # added score based on locked
             self.getTime()   # adjust score and time
             self.getShape()
             if self.Holded:

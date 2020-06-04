@@ -42,6 +42,7 @@ class Grid:
         YL = (rows + 1 ) * 2
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()                                     # block size 2 * 2
+        glLineWidth(1)
         glColor(1, 1, 1)                           
         glBegin(GL_LINES)                                     
         for y in range(Yo, Yo + YL, 2):            # Draw H lines
@@ -98,7 +99,7 @@ class Grid:
                 color = (1, x, x)
                 for cell in self.grid[rowsToClear[0]]:
                     cell[1] = color
-                Game.Draw()
+                Game.Draw(1)
                 x += .01
             
             # erase completed row
@@ -186,3 +187,20 @@ class Grid:
                     self.holdGrid[i][j] = self.inHold.color
         self.UpdateGridColors(self.holdGrid, (-12, 30))
         
+    def DrawGhost(self, position, state, shape):
+        glMatrixMode(GL_MODELVIEW)
+        glLoadIdentity()
+        glLineWidth(3)
+        for i in range(len(state)):
+            for j in range(len(state[i])):
+                if state[i][j] != 0:
+                    glColor(*shape.color)
+                    x = position[1] * 2 + j * 2
+                    y = position[0] * 2 - i * 2
+                    blockLen = 2
+                    glBegin(GL_LINE_LOOP)
+                    glVertex2f(x , y)
+                    glVertex2f(x , y + blockLen )
+                    glVertex2f(x + blockLen , y + blockLen)
+                    glVertex2f(x + blockLen , y )
+                    glEnd()
