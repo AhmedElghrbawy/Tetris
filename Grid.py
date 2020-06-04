@@ -9,6 +9,8 @@ class Grid:
     grid = []    # underlying data structure
     nextGrid = []
     next3Shapes = []
+    holdGrid = []
+    inHold = None   # shape in hold 
     def __init__(self):
         # main grid init
         self.grid = [0] * (self.row + 2)  # to avoid index out of range   # [full, (RGBcolor)]        
@@ -127,31 +129,60 @@ class Grid:
                         self.nextGrid[row - r][c] = shape.color
             row -= 3
         self.UpdateNextGridColors()  
-
-    def ClearNextGrid(self):
-        self.nextGrid = [0] * 8    # loops nextGrid and sets its color to black (clears it )
-        for i in range(8):
-            self.nextGrid[i] = []
-            for j in range(4):
-                self.nextGrid[i].append((0, 0, 0))
         
-    def UpdateNextGridColors(self):
+
+    def ClearGrid(self, rows, columns):
+        grid = [0] * rows
+        for i in range(rows):
+            grid[i] = []
+            for j in range(columns):
+                grid[i].append((0, 0, 0))
+        return grid
+    
+    
+    def ClearNextGrid(self):
+        self.nextGrid = self.ClearGrid(8, 4)
+        
+    def UpdateGridColors(self, grid, origin):
         '''
         updates the color for the user
         '''
+        Xo, Yo = origin
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
         glBegin(GL_QUADS)
-        for i in range(len(self.nextGrid)):
-            for j in range(len(self.nextGrid[i])):
-                color = self.nextGrid[i][j]
+        for i in range(len(grid)):
+            for j in range(len(grid[i])):
+                color = grid[i][j]
                 glColor(*color)
-                x = j * 2 + 24
-                y = i * 2 + 20
+                x = j * 2 + Xo
+                y = i * 2 + Yo
                 blockLen = 2
                 glVertex2f(x , y)
                 glVertex2f(x , y + blockLen )
                 glVertex2f(x + blockLen , y + blockLen)
                 glVertex2f(x + blockLen , y )
         glEnd()
+        
+        
+        
+    def UpdateNextGridColors(self):
+        self.UpdateGridColors(self.nextGrid, (24, 20))
+        
                 
+    def DrawHoldBackGround(self):
+        self.DrawBackground(2, 4, (-12, 30))
+    
+    def ClearHoldGrid(self):
+        self.holdGrid = self.ClearGrid(2, 4)
+        
+    def DrawHoldGrid(self):
+        if self.inHold == None:
+            return
+        self.ClearHoldGrid()
+        for i in range(2):     # only two rows in intial state
+            for j in range(len(self.inHold.states[0][0])):  
+                if self.inHold.states[0][i][j] == 1:
+                    self.holdGrid[i][j] = self.inHold.color
+        self.UpdateGridColors(self.holdGrid, (-12, 30))
+        

@@ -15,6 +15,7 @@ class Game:
     Level = 1
     score = 0
     gameOver = False       # used to disable functionality when game ends
+    Holded = False         # indicates if current shape is holded (can be swaped or not)
     def __init__(self):
         self.main()
         
@@ -24,8 +25,8 @@ class Game:
         pygame.mixer.music.load("Tetris_GameBoy.mp3")
         pygame.mixer.music.play(-1)
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
-        glutInitWindowSize(600, 800)
-        glutInitWindowPosition(800,0) 
+        glutInitWindowSize(800, 800)
+        glutInitWindowPosition(600,0) 
         glutCreateWindow(b'Tetris')
         glEnable(GL_DEPTH_TEST) 
         self.SetView()
@@ -39,7 +40,7 @@ class Game:
     def SetView(self):
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        glOrtho(0, 34, 0, 40, -1, 1)
+        glOrtho(-14, 34, 0, 40, -1, 1)
         
     def getShape(self):
         '''
@@ -64,20 +65,39 @@ class Game:
         self.Grid.DrawGrid()
         self.Grid.DrawNextBackground()
         self.Grid.DrawNextGrid()
+        self.Grid.DrawHoldBackGround()
+        self.Grid.DrawHoldGrid()
         self.RenderScore()
         glutSwapBuffers()
     
     def userInput(self, key, x, y):
         if self.gameOver:  # ignore user input
             return
+        if key == b'c':
+            self.Hold()
         locked, currentPos = self.currentShape.HandleInput(key)
         if locked:
             self.score += self.Grid.ClearLines(currentPos, self.Level, self)
-            self.score += 100 * self.Level
+            self.score += 50 * self.Level
             self.getTime()   # adjust score and time
             self.getShape()
+            if self.Holded:
+                self.Holded = False     # inhold shape can be swaped now
         self.Draw()
         
+    def Hold(self):
+        if self.Holded:   # cant make swap
+            return
+        self.currentShape.Update(0)
+        if self.Grid.inHold == None:    #  inhold is empty, put current shape in it and get new shape
+            self.Grid.inHold = type(self.currentShape)
+            self.getShape()
+            self.Holded = True
+        else:                        # inhold no empty, swap
+            self.Grid.inHold, self.currentShape = type(self.currentShape), self.Grid.inHold(self.Grid)
+            self.Holded = True
+              
+    
     def Gravity(self, value):
         '''
         auto transforms object down
@@ -118,10 +138,10 @@ class Game:
     def EndGame(self):
         glutDisplayFunc(self.EndGame)   # change the seen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        self.RenderScore(10, 20)
+        self.RenderScore(4, 20)
         glColor3f(1, 0, 0)
         glLoadIdentity()
-        glTranslate(10, 22, 0)
+        glTranslate(4, 22, 0)
         glScale(.009, .009, 1)
         for c in 'game over :('.encode():
             glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, c)
