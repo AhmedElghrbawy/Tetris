@@ -4,9 +4,9 @@ from OpenGL.GLUT import *
 import copy
 
 class Grid:
-    row = 22
+    row = 22  # 2 extra invisible rows
     column = 10
-    grid = []
+    grid = []    # underlying data structure
     nextGrid = []
     next3Shapes = []
     def __init__(self):
@@ -24,7 +24,14 @@ class Grid:
        
                  
     def DrawBackground(self, rows, columns, origin):
-        if rows == None:
+        '''
+        Draws background grid (horizontal and vertical lines)\n
+        parameters:\n
+        rows: number of rows
+        columns: number of columns
+        origin: origin of grid
+        '''
+        if rows == None:      # Default grid is main graid
             rows = self.row
             columns = self.column
             origin = (0, 0)
@@ -34,7 +41,7 @@ class Grid:
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()                                     # block size 2 * 2
         glColor(1, 1, 1)                           
-        glBegin(GL_LINES)                                     # visible Columns 20 --> 0 
+        glBegin(GL_LINES)                                     
         for y in range(Yo, Yo + YL, 2):            # Draw H lines
             glVertex2f(Xo, y)
             glVertex2f(Xo + columns * 2, y)             
@@ -44,6 +51,9 @@ class Grid:
         glEnd()   
 
     def DrawGrid(self):
+        '''
+        Draws tetrominoes blocks using the color stored in the underlying array data structure
+        '''
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
         glBegin(GL_QUADS)
@@ -62,6 +72,9 @@ class Grid:
         glEnd()
         
     def ClearLines(self, position, level, Game):
+        '''
+        Clears completed lines if exsit
+        '''
         rowsToClear = [-1, 0] # stores the index of the top-most completed row (if exists) and number of rows
         row = position[0]
         for row in range(row, row - 4, -1):
@@ -75,7 +88,7 @@ class Grid:
             if full == True:
                 rowsToClear[0] = max(rowsToClear[0], row)  # store top most
                 rowsToClear[1] += 1 # increase number of rows
-        n = rowsToClear[1]          # number of rows to be cleared (for scoring)
+        n = rowsToClear[1]          # number of rows to be cleared (for scoring system)
         while rowsToClear[1] > 0:
             # Animate
             x = 0

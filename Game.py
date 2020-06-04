@@ -9,12 +9,12 @@ import sys
 
 
 class Game:
-    Grid = Grid()
-    currentShape = None
-    shapeBag = []
+    Grid = Grid()          # Grid objects to be renderd
+    currentShape = None    # shape that the user has access to currently
+    shapeBag = []          # Random bag of shapes to be used next
     Level = 1
     score = 0
-    gameOver = False
+    gameOver = False       # used to disable functionality when game ends
     def __init__(self):
         self.main()
         
@@ -45,23 +45,22 @@ class Game:
         '''
         Defines shapes Bag and updates currentShape
         '''
-        if len(self.shapeBag) <= 3:
+        if len(self.shapeBag) <= 3:  # make sure 3 next Shapes exist
             tempList = [ITetrominoe, OTetrominoe, JTetrominoe, TTetrominoe, LTetrominoe, STetrominoe, ZTetrominoe]
             random.shuffle(tempList)
-            self.shapeBag = [*tempList, *self.shapeBag]
+            self.shapeBag = [*tempList, *self.shapeBag]  # prepend tempList to shapeBag
         try: # tries to spawn a new shape. if it fail, game ends
             self.currentShape = self.shapeBag[-1](self.Grid) 
         except ValueError as err:
             self.gameOver = True
             self.EndGame()
         self.shapeBag.pop(-1)
-        
-        self.Grid.next3Shapes = self.shapeBag[-1: -4: -1]        # last 3 shapes of shape bag
+        self.Grid.next3Shapes = self.shapeBag[-1: -4: -1]        # last 3 shapes of shape bag to render in next grid
         
         
     def Draw(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        self.Grid.DrawBackground(None, None, None) # make sure to draw this first
+        self.Grid.DrawBackground(None, None, None) 
         self.Grid.DrawGrid()
         self.Grid.DrawNextBackground()
         self.Grid.DrawNextGrid()
@@ -69,7 +68,7 @@ class Game:
         glutSwapBuffers()
     
     def userInput(self, key, x, y):
-        if self.gameOver:
+        if self.gameOver:  # ignore user input
             return
         locked, currentPos = self.currentShape.HandleInput(key)
         if locked:
@@ -117,7 +116,7 @@ class Game:
             glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, c) 
         
     def EndGame(self):
-        glutDisplayFunc(self.EndGame)
+        glutDisplayFunc(self.EndGame)   # change the seen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         self.RenderScore(10, 20)
         glColor3f(1, 0, 0)

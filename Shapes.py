@@ -16,18 +16,18 @@ class Shape():
         
     def Spawn(self):
         '''
-        try to spawn in row 21. if fail then try row 22. if both fails, game ends
+        try to spawn in row 21. if fail try row 22. if both fails, game ends
         '''
-        first = self.ValidTransforamtion(self.currentPosition, self.currentState)
+        first = self.ValidTransforamtion(self.currentPosition, self.currentState)  # first attempt
         if first:
             self.Update(1)
             return
-        self.currentPosition = [Grid.row - 1, int(Grid.column / 2 - 2)]
+        self.currentPosition = [Grid.row - 1, int(Grid.column / 2 - 2)] # second attempt
         second = self.ValidTransforamtion(self.currentPosition, self.currentState)
         if second:
             self.Update(1)
         else:
-            raise ValueError("Can't spawn tetrominoe, Game is quitting...")    
+            raise ValueError("Can't spawn tetrominoe")    
         
     def Update(self, Set):
         '''
@@ -50,8 +50,8 @@ class Shape():
     
     def HandleInput(self, key):
         gridRow, gridColumn = self.currentPosition
-        tempPos = [gridRow, gridColumn]
-        tempState = self.currentState
+        tempPos = [gridRow, gridColumn]  # try tempPos as possible next position
+        tempState = self.currentState    # try temps state as possible next state
         if key == GLUT_KEY_RIGHT:
             tempPos = [gridRow, gridColumn + 1]
         if key == GLUT_KEY_LEFT:
@@ -63,8 +63,8 @@ class Shape():
             tempState = self.getState(1)
         if key == b'z':
             tempState = self.getState(0)
-        if key == b' ':
-            while True:
+        if key == b' ':  # hard drop
+            while True:  # simulate key down input untill shape is locked
                 self.HandleInput(GLUT_KEY_DOWN)
                 if self.locked == True:
                     return (self.locked, self.currentPosition)
@@ -84,9 +84,9 @@ class Shape():
             self.currentState = tempState
             self.currentPosition = tempPos
         else:
-            if key == GLUT_KEY_DOWN:
+            if key == GLUT_KEY_DOWN:  # if last input was key down and transformation is invalid, lock shape
                 self.locked = True
-            self.indexOfState = index          # if rotation not valid, dont change index of state
+            self.indexOfState = index          # if Transformation not valid, dont change index of state
         self.Update(1)
         return (self.locked, self.currentPosition)
          
