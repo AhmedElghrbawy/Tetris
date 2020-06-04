@@ -16,6 +16,7 @@ class Game:
     score = 0
     gameOver = False       # used to disable functionality when game ends
     Holded = False         # indicates if current shape is holded (can be swaped or not)
+    Lines = 0              # number of cleard lines
     def __init__(self):
         self.main()
         
@@ -77,8 +78,10 @@ class Game:
             self.Hold()
         locked, currentPos = self.currentShape.HandleInput(key)
         if locked:
-            self.score += self.Grid.ClearLines(currentPos, self.Level, self)
-            self.score += 50 * self.Level
+            n = self.Grid.ClearLines(currentPos, self)
+            self.Lines += n
+            self.score += 100 * self.Level * n  # added score based on cleared lines
+            self.score += 50 * self.Level       # added score based on locked
             self.getTime()   # adjust score and time
             self.getShape()
             if self.Holded:
@@ -125,8 +128,10 @@ class Game:
         glScale(.009, .009, 1)
         score = "Score: " + str(self.score)
         level = "Level: " + str(self.Level)
+        Lines = "Lines: " + str(self.Lines)
         score = score.encode()
         level = level.encode()
+        Lines = Lines.encode()
         for c in score:
             glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, c) 
         glLoadIdentity()
@@ -134,6 +139,12 @@ class Game:
         glScale(.009, .009, 1)
         for c in level:
             glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, c) 
+        glLoadIdentity()
+        glTranslate(x, y-4, 0)
+        glScale(.009, .009, 1)
+        for c in Lines:
+            glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, c) 
+        
         
     def EndGame(self):
         glutDisplayFunc(self.EndGame)   # change the seen

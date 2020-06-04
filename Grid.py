@@ -73,7 +73,7 @@ class Grid:
                     glVertex2f(x + blockLen , y )
         glEnd()
         
-    def ClearLines(self, position, level, Game):
+    def ClearLines(self, position, Game):
         '''
         Clears completed lines if exsit
         '''
@@ -111,7 +111,7 @@ class Grid:
             for j in range(self.column):
                 self.grid[-1].append(copy.deepcopy(lis))    
         
-        return n * 100 * level
+        return n 
         
     def DrawNextBackground(self):
         self.DrawBackground(8, 4, (24, 20))
