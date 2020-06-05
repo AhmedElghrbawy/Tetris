@@ -62,9 +62,6 @@ class Game:
         
     def Draw(self, Animate = None):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        if Animate == None:
-            (gostPos, gostState) = self.currentShape.GetGhost()
-            self.Grid.DrawGhost(gostPos, gostState, self.currentShape)
         self.Grid.DrawBackground(None, None, None) 
         self.Grid.DrawGrid()
         self.Grid.DrawNextBackground()
@@ -72,6 +69,9 @@ class Game:
         self.Grid.DrawHoldBackGround()
         self.Grid.DrawHoldGrid()
         self.RenderScore()
+        if Animate == None:
+            (gostPos, gostState) = self.currentShape.GetGhost()
+            self.Grid.DrawGhost(gostPos, gostState, self.currentShape)
         glutSwapBuffers()
     
     def userInput(self, key, x, y):
@@ -128,6 +128,7 @@ class Game:
         glColor(0, 1, 0)
         glLoadIdentity()
         glTranslate(x, y, 0)
+        glLineWidth(1)
         glScale(.009, .009, 1)
         score = "Score: " + str(self.score)
         level = "Level: " + str(self.Level)
